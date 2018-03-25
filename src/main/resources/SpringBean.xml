@@ -11,8 +11,7 @@
 
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.mycompany.app.StudentDao" />
-	<context:component-scan base-package="com.mycompany.app.TeacherDao" />
+	<context:component-scan base-package="com.mycompany.app.LecturesDao" />
 	<tx:annotation-driven />
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
@@ -53,8 +52,28 @@
 		<property name="entityManagerFactory" ref="emf" />
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-    
-    <bean id="worker" class="com.mycompany.app.LecturesWorker" />
+
+	<bean id="worker" class="com.mycompany.app.LecturesWorker" />
+	<bean id="workerant" class="com.mycompany.app.LecturesWorkerAnthr" />
+
+	<bean id="transactionTemplate"
+		class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="transactionManager" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<tx:annotation-driven />
+
+
+
+
+
 	<!-- <bean id="vw" class="com.mycompany.app.VolksWagen" /> <bean id="dp" 
 		class="com.mycompany.app.DrivProcess" /> -->
 

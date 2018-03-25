@@ -1,12 +1,29 @@
-
 package com.mycompany.app;
 
-public interface LecturesDao {
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-	Lecture addLecture(Lecture lecture);
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-	Lecture getLecture(int id);
+@Repository
+@Transactional
+public class  LecturesDao {
+	
+	@PersistenceContext
+    private EntityManager em;
 
-	void saveLecture(Lecture lecture);
+	public Lecture addLecture(Lecture lecture) {
+		em.persist(lecture);
+        return lecture;
+	};
+
+	public  Lecture getLecture(int id) {
+		return em.find(Lecture.class, id);
+	};
+
+	public void saveLecture(Lecture lecture) {
+		em.merge(lecture);
+	};
 
 }
